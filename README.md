@@ -23,3 +23,7 @@ A configuração do sistema para o uso da Arduino IDE com a ESP32 pode ser feita
 2. A segunda etapa é adicionar a ESP32 ao gerenciador de placas da Arduino IDE, isso pode ser feito diretamente pelas configurações da Arduino IDE através de algumas [etapas](https://www.fernandok.com/2018/09/instalando-esp32-no-arduino-ide-metodo.html).
 3. Agora, é necessário adicionar as bibliotecas utilizadas para nos nossos códigos. Essas bibliotecas se encontram no próprio repositório, sendo elas `PS4-ESP32` e `Arduino-ESP32-Servo.`
 4. Por fim, é necessário instalar o [SixAxis Pair Tool](https://sixaxispairtool.en.lo4d.com/download). Este _software_ é utilizado para o caso dos códigos que utilizam o controle de PS4. Essa ferramenta permite atribuir um endereço MAC ao controle de PS4. A atribuição do endereço é importante pois esse endereço deve ser incluído no código do robô para fazer o pareamento com o controle.
+
+# Fontes
+1. [Biblioteca PS4](https://github.com/aed3/PS4-esp32)
+2. [Biblioteca Servo ESP32 - Arduino IDE](https://madhephaestus.github.io/ESP32Servo/annotated.html)
