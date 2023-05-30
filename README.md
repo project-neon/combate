@@ -2,7 +2,7 @@
 
 Repositório de arquivos do squad de combate da Project Neon. O repositório está divido com relação aos projetos da equipe, sendo que atualmente a equipe possui 2 robôs na categoria _Antweight_ (454 g):
 - `Doente:` robô do tipo rampa móvel, controlado por motores brushless através de locomoção tangenciada;
-- `Cirrose:` robô de arma ativa do tipo _vertical spinner_ controlado por motores N20.
+- `Cirrose:` robô de arma ativa do tipo _horizontal spinner_ controlado por motores N20.
 
 1 robô na categoria _Fairyweight_ (150 g): 
 - `Soluço:` robô do tipo rampa móvel, controlado por motores N20.
