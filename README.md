@@ -30,11 +30,11 @@ Alguns problemas podem ocorrer durante a instalação das bibliotecas utilizadas
 
 ## **Troca de controle**
 
-`Problema`:
+**Problema**:
 
  Um dos problemas recorrentes utilizando ocorre durante a troca de controles utilizados por uma placa. Mais precisamente, este problema ocorre no momento em que é realizada a troca de endereço MAC utilizando o SixAxisPairTool. Ao realizar essa troca, a ESP32 não estabelece conexão com o novo controle.
 
-`Solução`: 
+**Solução**: 
 
 Para solucionar este problema é necessário limpar a memória flash da placa antes de realizar o upload do código que contém o endereço MAC redefinido. A memória flash é a unidade de memória responsável pelo armazenamento das instruções realizadas pelo microcontrolador. 
 
@@ -49,13 +49,13 @@ Com o esptool instalado, basta rodar o seguinte comando para limpar a memória f
 
 ## **Versão da biblioteca da ESP32 no Arduino IDE**
 
-`Problema:`
+**Problema:**
 
- Esse é extremamente comum ao utilizar a biblioteca `PS4-esp32`. Ele ocorre durante a compilação do código utilizando essa biblioteca, resultando em um erro como:
+ Esse problema é extremamente comum ao utilizar a biblioteca `PS4-esp32`. Ele ocorre durante a compilação do código utilizando essa biblioteca, resultando em um erro como:
 
 <img src= "./common_error.png" />
 
-`Solução:`
+**Solução:**
 
 Esse erro é ocasionado por uma incompatibilidade entre a biblioteca `PS4-esp32` e a biblioteca de ESP32 para Arduino IDE. Isso ocorre pois existem dois links que podem ser colados na configurações do Arduino IDE (conforme [tutorial]( https://www.fernandok.com/2018/09/instalando-esp32-no-arduino-ide-metodo.html) ) para realizar a instalação da biblioteca de ESP32, sendo eles:
 
