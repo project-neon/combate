@@ -9,6 +9,8 @@ Repositório de arquivos do squad de combate da Project Neon. O repositório est
 
 ~~E 1 robô na categoria *Beetleweight*:~~
 
+<img src= "./combat_robots.jpeg" />
+
 Os arquivos referentes a eles estão separados com base nos núcleos que constituem os robôs, são eles: 
  - `Eletrônica:` onde estarão os arquivos dos circuitos desenvolvidos no KiCad para o controle dos robôs através da ESP32;
  - `Mecânica:` onde estarão os arquivos da modelagem mecânica dos robôs desenvolvidas no Fusion 360;

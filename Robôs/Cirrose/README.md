@@ -2,7 +2,7 @@
 
 Cirrose é um dos robôs de combate da categoria Antweight (454g) da Project Neon. Esse é um robô de duas rodas, caracterizado por sua arma ativa do tipo *horizontal spinner* - que funciona como um poderoso disco de inércia movido através de um motor *brushless*.
 
-<img src= "./cirrose.jpg" />
+<img src= "./cirrose.jpeg" />
 
 O Cirrose, assim como todos os robôs da categoria de combate da Project Neon, é controlado por um controle de PS4. Ele é programado para funcionar através dos seguintes comando:
 
