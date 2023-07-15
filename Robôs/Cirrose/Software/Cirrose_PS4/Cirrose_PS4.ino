@@ -17,7 +17,7 @@
 #define Ppm_Min_Throttle  1048
 #define Ppm_Max_Throttle  1952
 //Setup MAC address do controle
-#define MAC_ADDRESS "01:01:01:01:01:01"
+#define MAC_ADDRESS "64:64:64:64:64:64"
 
 //VARIÁVEL DE INVERSÃO DE MOVIMENTO
 int inv = 1; //se o robô estiver começando invertindo, alternar para -1 ou 1

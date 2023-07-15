@@ -2,8 +2,8 @@
 #include <PS4Controller.h>
 
   //Setup pinos Locomocão Ponte H (TB6612fng)
-  #define PWMA 27
-  #define PWMB 26
+  #define PWMA 34
+  #define PWMB 35
   #define A1 13
   #define A2 12
   #define B1 33
@@ -59,7 +59,7 @@ void setup(void) {
     delay(10); // will pause Zero, Leonardo, etc until serial console opens
 
 
-  PS4.begin("66:66:66:66:66:66");
+  PS4.begin("01:01:01:01:01:01");
   Serial.println("Ready.");
   
   ledcAttachPin(PWMA,5);
