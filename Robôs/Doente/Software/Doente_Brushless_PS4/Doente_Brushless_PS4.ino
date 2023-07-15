@@ -3,7 +3,7 @@
 //Biblioteca para controle de servo p/ brushless
 #include <ESP32Servo.h>
 
-char ipControle[18] = "F2:32:20:B9:89:CF"; //MAC address atrubuído ao controle
+char ipControle[18] = "5C:96:56:64:A6:20"; //MAC address atrubuído ao controle
 int analogicoMargemDeErro = 30; //definiçao do ponto morto
 
 //Pinos das ESCs
