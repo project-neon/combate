@@ -1,8 +1,8 @@
 //---------------- PINOS DO DIP SWITCH ---------------//
-#define switch1 34 
-#define switch2 35
-#define switch3 32
-#define switch4 33
+#define switch1 3 
+#define switch2 4
+#define switch3 5
+#define switch4 6
 
 #define TEMPO_DETECCAO 10000
 #define TENTATIVAS_ACHA_ROBO 30
@@ -58,8 +58,8 @@ int detectaRobo(){
 void loop() {
   //delay(5000);
   if (detect == 0) {
-  broadcastIndex = detectaRobo();
-  detect = 1;
+    broadcastIndex = detectaRobo();
+    detect = 1;
   }
   lastBroadcastIndex = broadcastIndex;
   /*if (digitalRead(switch1) == 1 && digitalRead(switch2) == 1 && digitalRead(switch3) == 1 && digitalRead(switch4) == 1) broadcastIndex = 0;
