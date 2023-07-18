@@ -56,8 +56,8 @@ int detectaRobo(){
       if(n_def==3) n3 += 1;
       if(n_def==4) n4 += 1;
     }
-    Serial.print("N: ");
-    Serial.println(n);
+   /* Serial.print("N: ");
+    Serial.print(n);
     Serial.print("N0:");
     Serial.print(n0);
     Serial.print("\t");
@@ -71,7 +71,7 @@ int detectaRobo(){
     Serial.print(n3);
     Serial.print("\t");
     Serial.print("N4:");
-    Serial.println(n4);
+    Serial.println(n4);*/
   }
   Serial.print("N0:");
   Serial.print(n0);
