@@ -1,3 +1,9 @@
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+
 //---------------- PINOS DO DIP SWITCH ---------------//
 #define switch1 34 
 #define switch2 35
@@ -8,6 +14,14 @@
 #define TEMPO_DETECCAO 100
 #define TENTATIVAS_ACHA_ROBO 20
 #define DETECT_AGAIN 2000
+
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+// Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
+#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
 
 int broadcastIndex = 0; //índice para o Mac Address no array de Mac Addresses
 int lastBroadcastIndex = 0;
@@ -25,9 +39,27 @@ void setup() {
   pinMode(switch3, INPUT);
   pinMode(switch4, INPUT); //VERIFICAR SE OS PINOS SÃO DE FATO PULLUP 
   //Se não forem PULLUP, a função getIndex deverá ser alterada retirando o
+
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
+
+  // Show initial display buffer contents on the screen --
+  // the library initializes this with an Adafruit splash screen.
+  display.clearDisplay();
+  delay(2000); // Pause for 2 seconds
+  display.setTextSize(1);         // set text size
+  display.setTextColor(WHITE);    // set text color
+  display.setCursor(0, 10);       // set position to display
+  display.println("Selecao de Robos:");
+  display.display();
+
 }
 
 int detectaRobo(){
+  display.clearDisplay();
+  display.setCursor(0, 10);
   int n = 0;
   int tempo_inicio = 0;
   uint8_t n0 = 0;
@@ -90,8 +122,7 @@ int detectaRobo(){
   Serial.print(n3);
   Serial.print("\t");
   Serial.print("N4:");
-  Serial.print(n4);
-  Serial.print("\t");
+  Serial.println(n4);
   int numeros[5] = {n0 , n1, n2, n3, n4};
   for(int i = 0; i <= 4; i++){
     if(numeros[i] > maior){
@@ -101,30 +132,43 @@ int detectaRobo(){
   }
   if (n_error > maior){
     maior_n = 5;
-    Serial.println("Seleção Inválida");
+    display.println("Selecao Invalida");
   }
   else{
     if (maior_n != 0){
-      Serial.print("Robô detectado: ");
-      Serial.println(maior_n);
+      display.print("Robo detectado: \t ");
     }
+    else if(maior_n == 1){
+      display.print("1. Cirrose ");
+    }
+    }
+
     else{
-      Serial.println("Nenhum robô selecionado");
+      display.println("Nenhum robo selecionado");
     }
   }
+  display.display();
 
   return maior_n;
 }
 
 
 
+
 void loop() {
   //delay(5000);
-  if (detect == 0) {
+  delay(2000);
+ // if (detect == 0) {
  // if(digitalRead(connect_button == 0)) {
     broadcastIndex = detectaRobo();
     detect = 1 ;
-  }
+ //}
+  delay(2500);
+  display.clearDisplay();
+  display.setCursor(0, 10);
+  display.println("----");
+  display.display();
+  delay(2000);
  /* if ((digitalRead(connect_button == HIGH)) && (detect == 1) && (millis() - start_time > 2000))
   {
     broadcastIndex = detectaRobo();
