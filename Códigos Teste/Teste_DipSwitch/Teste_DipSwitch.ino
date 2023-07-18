@@ -3,6 +3,7 @@
 #define switch2 35
 #define switch3 32
 #define switch4 33
+#define connect_button 12
 
 #define TEMPO_DETECCAO 100
 #define TENTATIVAS_ACHA_ROBO 20
@@ -13,10 +14,12 @@ int lastBroadcastIndex = 0;
 int detect = 0;
 
 unsigned long detect_time = 0;
+unsigned long start_time = 0;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
+  pinMode(connect_button, INPUT);
   pinMode(switch1, INPUT);
   pinMode(switch2, INPUT);
   pinMode(switch3, INPUT);
@@ -118,10 +121,15 @@ int detectaRobo(){
 void loop() {
   //delay(5000);
   if (detect == 0) {
+ // if(digitalRead(connect_button == 0)) {
     broadcastIndex = detectaRobo();
-    detect_time = millis();
-    detect = 1;
+    detect = 1 ;
   }
-  if (millis() - detect_time > 2000) detect = 0;
+ /* if ((digitalRead(connect_button == HIGH)) && (detect == 1) && (millis() - start_time > 2000))
+  {
+    broadcastIndex = detectaRobo();
+    detect = 0;
+  }*/
+  //Serial.println(digitalRead(connect_button));
 
 }

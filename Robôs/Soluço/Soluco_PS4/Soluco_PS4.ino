@@ -8,7 +8,7 @@
   #define A2 12
   #define B1 33
   #define B2 25
-
+  #define MAC_ADDRESS "64:64:64:64:64:64"
 
 int inv = 1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
 void motors_control(int linear, int angular) {
@@ -59,7 +59,7 @@ void setup(void) {
     delay(10); // will pause Zero, Leonardo, etc until serial console opens
 
 
-  PS4.begin("01:01:01:01:01:01");
+  PS4.begin(MAC_ADDRESS);
   Serial.println("Ready.");
   
   ledcAttachPin(PWMA,5);
