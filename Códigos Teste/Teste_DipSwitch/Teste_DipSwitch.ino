@@ -41,24 +41,25 @@ int detectaRobo(){
     tempo_inicio = millis();
     while(millis()-tempo_inicio < TEMPO_DETECCAO){
       n = 0;
-      n = (1*(!digitalRead(switch1))
-      + 2*(!digitalRead(switch2))
-      + 3*(!digitalRead(switch3))
-      + 4*(!digitalRead(switch4)));
-      if (n == 0 || n == 1 || n == 2 || n== 3 || n==4) break;
+      n = (5*(!digitalRead(switch1))
+      + 6*(!digitalRead(switch2))
+      + 7*(!digitalRead(switch3))
+      + 8*(!digitalRead(switch4)));
+      if (n == 0 || n == 5 || n == 6 || n== 7 || n==8) break;
     }
     n_def = n;
-    if (n_def > 4) n_error += 1;
+    if (n_def > 8) n_error += 1;
     else{
       if(n_def==0) n0 += 1;
-      if(n_def==1) n1 += 1;
-      if(n_def==2) n2 += 1;
-      if(n_def==3) n3 += 1;
-      if(n_def==4) n4 += 1;
+      if(n_def==5) n1 += 1;
+      if(n_def==6) n2 += 1;
+      if(n_def==7) n3 += 1;
+      if(n_def==8) n4 += 1;
     }
    /* Serial.print("N: ");
     Serial.print(n);
-    Serial.print("N0:");
+    Serial.print("\t");
+   /* Serial.print("N0:");
     Serial.print(n0);
     Serial.print("\t");
     Serial.print("N1:");
@@ -90,7 +91,6 @@ int detectaRobo(){
   Serial.print("\t");
   int numeros[5] = {n0 , n1, n2, n3, n4};
   for(int i = 0; i <= 4; i++){
-   // Serial.println(numeros[i-1]);
     if(numeros[i] > maior){
        maior = numeros[i];
        maior_n = i;
@@ -113,6 +113,8 @@ int detectaRobo(){
   return maior_n;
 }
 
+
+
 void loop() {
   //delay(5000);
   if (detect == 0) {
@@ -121,24 +123,5 @@ void loop() {
     detect = 1;
   }
   if (millis() - detect_time > 2000) detect = 0;
-  lastBroadcastIndex = broadcastIndex;
-  /*if (digitalRead(switch1) == 1 && digitalRead(switch2) == 1 && digitalRead(switch3) == 1 && digitalRead(switch4) == 1) broadcastIndex = 0;
-  else if (digitalRead(switch1) == 1 && digitalRead(switch2) == 0 && digitalRead(switch3) == 1 && digitalRead(switch4) == 1) broadcastIndex = 1;
-  else if (digitalRead(switch1) == 1 && digitalRead(switch2) == 1 && digitalRead(switch3) == 0 && digitalRead(switch4) == 1) broadcastIndex = 2;
-  else if (digitalRead(switch1) == 1 && digitalRead(switch2) == 1 && digitalRead(switch3) == 1 && digitalRead(switch4) == 0) broadcastIndex = 3; */
- /* if (digitalRead(switch1) == 1 && digitalRead(switch2) == 0 && digitalRead(switch3) == 0 && digitalRead(switch4) == 0) broadcastIndex = 0;
-  else if (digitalRead(switch1) == 0 && digitalRead(switch2) == 1 && digitalRead(switch3) == 0 && digitalRead(switch4) == 0) broadcastIndex = 1;
-  else if (digitalRead(switch1) == 0 && digitalRead(switch2) == 0 && digitalRead(switch3) == 1 && digitalRead(switch4) == 0) broadcastIndex = 2;
-  else if (digitalRead(switch1) == 0 && digitalRead(switch2) == 0 && digitalRead(switch3) == 0 && digitalRead(switch4) == 1) broadcastIndex = 3;
-  else broadcastIndex = 0;*/
-  broadcastIndex = (1*(!digitalRead(switch1))
-  + 2*(!digitalRead(switch2))
-  + 3*(!digitalRead(switch3))
-  + 4*(!digitalRead(switch4)));
-  //Serial.print("Broadcast index: ");
-  //Serial.println(broadcastIndex);
- // if (broadcastIndex != lastBroadcastIndex){
-  //Serial.print("Dip Switch: ");
- // Serial.println(broadcastIndex);
-  //}
+
 }
