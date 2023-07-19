@@ -30,7 +30,7 @@ typedef struct struct_message {
   int leftSpd;  //recebe o valor da velocidade da esquerda
   String Dir; //recebe o valor da direção
   int val;
-  int weapon
+  int weapon;
 
 } struct_message;
 
@@ -47,8 +47,8 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   Serial.print(myData.rightSpd);
   Serial.print("\t");
   Serial.print("VE: ");
-  Serial.print(myData.leftSpd);
-  Serial.print("\t");
+  Serial.println(myData.leftSpd);
+//  Serial.print("\t");
 }
 
 void setup() {

@@ -94,7 +94,7 @@ int maiorRY = 4095;
 //---------- ----------------------- ---------------- //
 
 uint8_t mac_address[6] = {};
-uint8_t addressArrays[4][6] = {{0x08, 0x3A, 0xF2, 0x50, 0xE0, 0x30}, {0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF},
+uint8_t addressArrays[4][6] = {{0x08, 0x3A, 0xF2, 0x50, 0xE0, 0x30}, {0x0C, 0xDC, 0x7E, 0x5E, 0x97, 0x0C},
                               {0x11, 0x22, 0x33, 0x44, 0x55, 0x66}, {0xFF, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE}} ;// INSERIR 4 MAC ADDRESSES RELATIVOS A ESPS RECEPTORAS DIFERENTES 
 
 static const uint8_t neon_logo[1024] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
@@ -235,8 +235,9 @@ void loop() {
       while(true){
         mac_index = detectaRobo();
         delay(1500);
+        Serial.print("Index: ");
         Serial.println(mac_index);
-        if (mac_index != 5 || mac_index != 0){
+        if (mac_index != 0){
           mac_index = mac_index - 1;
           memcpy(mac_address, addressArrays[mac_index], 6);
           status_connect = connectRobot(mac_address);
@@ -245,8 +246,16 @@ void loop() {
             detect = 1;
             break;
           }
+          if(detect == 0){
+            display.setCursor(0, 10);
+            display.clearDisplay();
+            display.println("Tentando novamente...");
+            display.display();
+            Serial.println("Tentando novamente");
+            delay(1000);            
+          }
         }
-        else{
+        else if (mac_index == 0){
            display.setCursor(0, 10);
            display.clearDisplay();
            display.println("Tentando novamente...");
@@ -433,6 +442,7 @@ int detectaRobo(){
     maior_n = 5;
     Serial.println("Selecao Invalida");
     display.println("Selecao Invalida");
+    maior_n = 0;
   }
   else{
     if(maior_n == 1){
@@ -469,13 +479,13 @@ int connectRobot(uint8_t* MacAddress){
   display.clearDisplay();
   display.setCursor(0, 10);
   // Adiciona o dispositivo que receberá os dados (peer)  
-  if (esp_now_add_peer(&peerInfo) != ESP_OK){
-    display.println("FALHA NA CONEXAO");
-    Serial.println("Failed to add peer");
-  }
-  else if (esp_now_add_peer(&peerInfo) == ESP_OK){
+  if (esp_now_add_peer(&peerInfo) == ESP_OK){
       display.println("CONECTADO");
       status = 1;
+  }
+  else{
+      display.println("FALHA NA CONEXAO");
+      Serial.println("Falha conexao");
   }
   display.display();
   return status;
