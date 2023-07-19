@@ -30,6 +30,8 @@ typedef struct struct_message {
   int leftSpd;  //recebe o valor da velocidade da esquerda
   String Dir; //recebe o valor da direção
   int val;
+  int weapon
+
 } struct_message;
 
 

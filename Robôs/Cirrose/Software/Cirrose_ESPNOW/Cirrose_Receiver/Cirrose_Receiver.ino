@@ -36,7 +36,7 @@ typedef struct struct_message {
   int leftSpd;  //recebe o valor da velocidade da esquerda
   String Dir; //recebe o valor da direção
   int val;
-  int angle;
+  int weapon;
 } struct_message;
 
 
@@ -111,8 +111,8 @@ void loop() {
     digitalWrite(B1,0);
     digitalWrite(B2,0);
   }else{
-    SpdRight = map(myData.rightSpd, -100, 100, -180, 180);   // Realiza a conversão para valores entre 0 e 180 para o motor da direita
-    SpdLeft = map(myData.leftSpd, -100, 100, -180, 180); // Realiza a conversão para valores entre 0 e 180 para o motor da esquerda
+    SpdRight = map(inv*myData.rightSpd, -100, 100, -180, 180);   // Realiza a conversão para valores entre 0 e 180 para o motor da direita
+    SpdLeft = map(inv*myData.leftSpd, -100, 100, -180, 180); // Realiza a conversão para valores entre 0 e 180 para o motor da esquerda
     digitalWrite(LED, HIGH);
   }
 
@@ -137,7 +137,7 @@ void loop() {
     digitalWrite(B2,1);
   }
   ledcWrite(6, abs(myData.rightSpd));
-  servo.write(myData.angle); //COMENTAR ESTE COMANDO EM CASO DE TESTE!!!!! (ATIVA A ARMA)
+  servo.write(myData.weapon); //COMENTAR ESTE COMANDO EM CASO DE TESTE!!!!! (ATIVA A ARMA)
 
   Serial.print("Angle: ");
   Serial.println(myData.angle);
