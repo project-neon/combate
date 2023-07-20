@@ -2,6 +2,8 @@
 #include <WiFi.h>
 #include <ESP32Servo.h> 
 
+#define CONNECT_KEY 2304
+
 //Locomocão 
 #define PWMA 27
 #define PWMB 26
@@ -32,6 +34,7 @@ int lastVal = 0;
 //Estrutura damensagem que será enviada
 //DEVE SER A MESMA ESTRUTURA NO EMISSOR
 typedef struct struct_message {
+  int key;
   int rightSpd;   //recebe o valor da velocidade da direita
   int leftSpd;  //recebe o valor da velocidade da esquerda
   String Dir; //recebe o valor da direção
@@ -100,50 +103,51 @@ void setup() {
 }
  
 void loop() {
-  
-  if (myData.val == lastVal){
-    SpdRight = map(0, -100, 100, -180, 180);
-    SpdLeft = map(0, -100, 100, -180, 180);
-    digitalWrite(LED, LOW);
-    servo.write(0);
-    digitalWrite(A1,0);
-    digitalWrite(A2,0);
-    digitalWrite(B1,0);
-    digitalWrite(B2,0);
-  }else{
-    SpdRight = map(inv*myData.rightSpd, -100, 100, -180, 180);   // Realiza a conversão para valores entre 0 e 180 para o motor da direita
-    SpdLeft = map(inv*myData.leftSpd, -100, 100, -180, 180); // Realiza a conversão para valores entre 0 e 180 para o motor da esquerda
-    digitalWrite(LED, HIGH);
-  }
+  if (myData.key == CONNECT_KEY){
+    if (myData.val == lastVal){
+      SpdRight = map(0, -100, 100, -180, 180);
+      SpdLeft = map(0, -100, 100, -180, 180);
+      digitalWrite(LED, LOW);
+      servo.write(90);
+      digitalWrite(A1,0);
+      digitalWrite(A2,0);
+      digitalWrite(B1,0);
+      digitalWrite(B2,0);
+    }else{
+      SpdRight = map(inv*myData.rightSpd, -100, 100, -180, 180);   // Realiza a conversão para valores entre 0 e 180 para o motor da direita
+      SpdLeft = map(inv*myData.leftSpd, -100, 100, -180, 180); // Realiza a conversão para valores entre 0 e 180 para o motor da esquerda
+      digitalWrite(LED, HIGH);
+    }
 
-  lastVal = myData.val;
+    lastVal = myData.val;
 
-  if(myData.rightSpd > 0){
-    digitalWrite(A1,1);
-    digitalWrite(A2,0);
-  }
-  else{
-    digitalWrite(A1,0);
-    digitalWrite(A2,1);
-  }
-  ledcWrite(5, abs(myData.leftSpd));
+    if(myData.rightSpd > 0){
+      digitalWrite(A1,1);
+      digitalWrite(A2,0);
+    }
+    else{
+      digitalWrite(A1,0);
+      digitalWrite(A2,1);
+    }
+    ledcWrite(5, abs(myData.leftSpd));
 
-  if(myData.rightSpd > 0){
-    digitalWrite(B1,1);
-    digitalWrite(B2,0);
-  }
-  else{
-    digitalWrite(B1,0);
-    digitalWrite(B2,1);
-  }
-  ledcWrite(6, abs(myData.rightSpd));
-  servo.write(myData.weapon); //COMENTAR ESTE COMANDO EM CASO DE TESTE!!!!! (ATIVA A ARMA)
+    if(myData.rightSpd > 0){
+      digitalWrite(B1,1);
+      digitalWrite(B2,0);
+    }
+    else{
+      digitalWrite(B1,0);
+      digitalWrite(B2,1);
+    }
+    ledcWrite(6, abs(myData.rightSpd));
+    servo.write(myData.weapon); //COMENTAR ESTE COMANDO EM CASO DE TESTE!!!!! (ATIVA A ARMA)
 
-  Serial.print("Angle: ");
-  Serial.println(myData.angle);
-  Serial.print("SpdRight: ");
-  Serial.print(SpdRight);
-  Serial.print("\t");
-  Serial.print("SpdLeft: ");
-  Serial.println(SpdLeft);
+    Serial.print("Angle: ");
+    Serial.println(myData.angle);
+    Serial.print("SpdRight: ");
+    Serial.print(SpdRight);
+    Serial.print("\t");
+    Serial.print("SpdLeft: ");
+    Serial.println(SpdLeft);
+  }
 }

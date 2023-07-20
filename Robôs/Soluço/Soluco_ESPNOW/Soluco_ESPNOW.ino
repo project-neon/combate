@@ -1,6 +1,8 @@
 #include <esp_now.h>
 #include <WiFi.h>
 
+#define CONNECT_KEY 2304
+
 //Locomocão 
 #define PWMA 27
 #define PWMB 26
@@ -26,6 +28,7 @@ int lastVal = 0;
 //Estrutura damensagem que será enviada
 //DEVE SER A MESMA ESTRUTURA NO EMISSOR
 typedef struct struct_message {
+  int key;
   int rightSpd;   //recebe o valor da velocidade da direita
   int leftSpd;  //recebe o valor da velocidade da esquerda
   String Dir; //recebe o valor da direção
@@ -88,44 +91,45 @@ void setup() {
 }
  
 void loop() {
-  
-  if (myData.val == lastVal){
-    SpdRight = map(0, -100, 100, -255, 255);
-    SpdLeft = map(0, -100, 100, -255, 255);
-    digitalWrite(LED, LOW);
-  }else{
-    SpdRight = map(myData.rightSpd, -100, 100, -255, 255);   // Realiza a conversão para valores entre 0 e 180 para o motor da direita
-    SpdLeft = map(myData.leftSpd, -100, 100, -255, 255); // Realiza a conversão para valores entre 0 e 180 para o motor da esquerda
-    digitalWrite(LED, HIGH);
-  }
+  if (key == CONNECT_KEY){
+    if (myData.val == lastVal){
+      SpdRight = map(0, -100, 100, -255, 255);
+      SpdLeft = map(0, -100, 100, -255, 255);
+      digitalWrite(LED, LOW);
+    }else{
+      SpdRight = map(myData.rightSpd, -100, 100, -255, 255);   // Realiza a conversão para valores entre 0 e 180 para o motor da direita
+      SpdLeft = map(myData.leftSpd, -100, 100, -255, 255); // Realiza a conversão para valores entre 0 e 180 para o motor da esquerda
+      digitalWrite(LED, HIGH);
+    }
 
-  lastVal = myData.val;
+    lastVal = myData.val;
 
-  if(myData.rightSpd > 0){
-    digitalWrite(A1,0);
-    digitalWrite(A2,1);
-  }
-  else{
-    digitalWrite(A1,1);
-    digitalWrite(A2,0);
-  }
-  ledcWrite(5, abs(SpdRight));
+    if(myData.rightSpd > 0){
+      digitalWrite(A1,0);
+      digitalWrite(A2,1);
+    }
+    else{
+      digitalWrite(A1,1);
+      digitalWrite(A2,0);
+    }
+    ledcWrite(5, abs(SpdRight));
 
-  if(myData.leftSpd > 0){
-    digitalWrite(B1,0);
-    digitalWrite(B2,1);
-  }
-  else{
-    digitalWrite(B1,1);
-    digitalWrite(B2,0);
-  }
-  ledcWrite(6, abs(SpdLeft));
+    if(myData.leftSpd > 0){
+      digitalWrite(B1,0);
+      digitalWrite(B2,1);
+    }
+    else{
+      digitalWrite(B1,1);
+      digitalWrite(B2,0);
+    }
+    ledcWrite(6, abs(SpdLeft));
 
 
- /* Serial.print("SpdRight: ");
-  Serial.print(SpdRight);
-  Serial.print("\t");
-  Serial.print("SpdLeft: ");
-  Serial.println(SpdLeft); */
+  /* Serial.print("SpdRight: ");
+    Serial.print(SpdRight);
+    Serial.print("\t");
+    Serial.print("SpdLeft: ");
+    Serial.println(SpdLeft); */
+  }
   delay(20);
 }
