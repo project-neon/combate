@@ -2,13 +2,13 @@
 #include <PS4Controller.h>
 
   //Setup pinos Locomocão Ponte H (TB6612fng)
-  #define PWMA 34
-  #define PWMB 35
+  #define PWMA 27
+  #define PWMB 26
   #define A1 13
   #define A2 12
   #define B1 33
   #define B2 25
-  #define MAC_ADDRESS "64:64:64:64:64:64"
+  #define MAC_ADDRESS "56:A4:53:A2:01:8F"
 
 int inv = 1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
 void motors_control(int linear, int angular) {

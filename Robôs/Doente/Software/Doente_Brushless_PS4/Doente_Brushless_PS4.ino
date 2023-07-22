@@ -33,18 +33,24 @@ void motors_control(int linear, int angular) {
   if(result_L<-255 ) result_L=-254;  
   
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
-  motor_A(result_R); 
   motor_B(result_L);
+  motor_A(result_R); 
+
 }
 
 void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for negativo troca o sentido
-  speedA = map(speedA, -255, 255, 35, 145);  
+  speedA = map(speedA, -255, 255, 120, 60);  
   ESCR.write(speedA);
+  Serial.print("R: ");
+  Serial.println(speedA);
 }
 
 void motor_B(int speedB){
-  speedB = map(speedB, -255, 255, 35, 145);  
+  speedB = map(speedB, -255, 255, 60, 120);  
   ESCL.write(speedB);
+  Serial.print("L: ");
+  Serial.print(speedB);
+  Serial.print("\t");
 }
 
 
