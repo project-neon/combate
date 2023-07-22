@@ -4,18 +4,18 @@
 
 
 //Setup pino ESC locomoção
-#define ESCPinL 14
-#define ESCPinR 12
+#define ESCPinL 2
+#define ESCPinR 4
 
 //Setup pino da ESC da arma
-#define ESCPinArma 2
+#define ESCPinArma 15
 //Setup frequência e largura min/max de pulso do Brushless da arma
 //ARRUMAR PARAMETROS DE PULSO NA ESC
 #define frequenciaESC 50
 #define Ppm_Min_Throttle  1048
 #define Ppm_Max_Throttle  1952
 //Setup MAC address do controle
-#define MAC_ADDRESS "64:64:64:64:64:64"
+#define MAC_ADDRESS ""
 
 //VARIÁVEL DE INVERSÃO DE MOVIMENTO
 int inv = 1; //se o robô estiver começando invertindo, alternar para -1 ou 1

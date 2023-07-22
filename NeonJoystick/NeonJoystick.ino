@@ -82,6 +82,10 @@ int menor = -1;
 int var1 = 0;
 int maior = 0;
 
+unsigned long t_b1 = 0;
+unsigned long t_b2 = 0;
+
+
 int menorLX = 0;
 int menorMidLX = 1450;
 int maiorMidLX = 1900;
@@ -492,25 +496,26 @@ void loop() {
 
 
 
-   /* if(digitalRead(B1) == 1){ //Sentido de rotação normal quando B1 é acionado
+   if((digitalRead(B1) == 1) && (button1 == 0)){ //Sentido de rotação normal quando B1 é acionado
       button1 = 1;
       inv = 1;
+      t_b1 = millis();
     }
-    if (button1 = 1 && (millis() - t_b1) > DT_DEBOUNCING){
+    if ((button1 = 1) && ((millis() - t_b1) > DT_DEBOUNCING)){
       button1 = 0;
     }
 
-    if(digitalRead(B2) == 1){ //Inverte o sentido de rotação quando B2 é acionado
-      inv = -1;
+    
+  if((digitalRead(B2) == 1) && (button2 == 0)){ //Sentido de rotação normal quando B1 é acionado
       button2 = 1;
-      Serial.print("B2: ");
-      Serial.print(button2);
+      inv = -1;
+      t_b2 = millis();
     }
-    else{
+    if ((button2 = 1) && ((millis() - t_b2) > DT_DEBOUNCING)){
       button2 = 0;
     }
 
-*/
+
     valorDir = analogRead(potPinD);
     valorSpd = analogRead(potPinV);
 
@@ -544,11 +549,13 @@ void loop() {
         mySpd.dir = "CENTRO";
     }
 
-   // Serial.print("VD: ");
-   // Serial.print(mySpd.spdRight);
-   // Serial.print("\t");
-   // Serial.print("VE: ");
-   // Serial.println(mySpd.spdLeft);/*
+    Serial.print("VD: ");
+    Serial.print(mySpd.spdRight);
+    Serial.print("\t");
+    Serial.print("VE: ");
+    Serial.print(mySpd.spdLeft);
+    Serial.print("\t");
+    /*
   /*    Serial.print("B1: ");
       Serial.print(button1);
     Serial.print("\t");
@@ -561,11 +568,11 @@ void loop() {
     //Serial.print("DipSwitch: ");
     //Serial.print(mySpd.dip_switch);
     Serial.print("\t");
-    Serial.print("B1: ");
-    Serial.print(mySpd.b1);
+    */Serial.print("B1: ");
+    Serial.print(button1);
     Serial.print("B2: ");
-    Serial.println(mySpd.b2);
-    Serial.print("B3: ");
+    Serial.println(button2);
+    /*Serial.print("B3: ");
     Serial.print(mySpd.b3);
     Serial.print("\t");
     Serial.print("B4: ");
@@ -704,7 +711,7 @@ int connectRobot(uint8_t* MacAddress){
       Serial.println("Falha na conexao");
   }
   else{
-      display.println("CONECTADO");
+      display.println("OK");
       status = 1;
   }
   display.display();

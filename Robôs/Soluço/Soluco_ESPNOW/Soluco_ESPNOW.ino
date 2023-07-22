@@ -91,10 +91,10 @@ void setup() {
 }
  
 void loop() {
-  if (key == CONNECT_KEY){
+  if (myData.key == CONNECT_KEY){
     if (myData.val == lastVal){
-      SpdRight = map(0, -100, 100, -255, 255);
-      SpdLeft = map(0, -100, 100, -255, 255);
+      SpdRight = 0;
+      SpdLeft = 0;
       digitalWrite(LED, LOW);
     }else{
       SpdRight = map(myData.rightSpd, -100, 100, -255, 255);   // Realiza a conversão para valores entre 0 e 180 para o motor da direita
