@@ -3,6 +3,7 @@
 //Biblioteca para controle de servo p/ brushless
 #include <ESP32Servo.h>
 
+#define CONNECT_KEY 2304
 
 //Pinos das ESCs
 int ESCRPinL = 32;   
@@ -33,10 +34,12 @@ int lastVal = 0;
 //Estrutura damensagem que será enviada
 //DEVE SER A MESMA ESTRUTURA NO EMISSOR
 typedef struct struct_message {
+  int key;
   int rightSpd;   //recebe o valor da velocidade da direita
   int leftSpd;  //recebe o valor da velocidade da esquerda
   String Dir; //recebe o valor da direção
   int val;
+  int weapon
 } struct_message;
 
 
@@ -83,26 +86,28 @@ void setup() {
  
 void loop() {
   
-  if (myData.val == lastVal){
-    SpdRight = map(0, -100, 100, 0, 180);
-    SpdLeft = map(0, -100, 100, 0, 180);
-    digitalWrite(LED, LOW);
-  }else{
-    SpdRight = map(myData.rightSpd, -100, 100, 0, 180);   // Realiza a conversão para valores entre 0 e 180 para o motor da direita
-    SpdLeft = map(myData.leftSpd, -100, 100, 0, 180); // Realiza a conversão para valores entre 0 e 180 para o motor da esquerda
-    digitalWrite(LED, HIGH);
+  if (key == CONNECT_KEY){
+    if (myData.val == lastVal){
+      SpdRight = map(0, -100, 100, 0, 180);
+      SpdLeft = map(0, -100, 100, 0, 180);
+      digitalWrite(LED, LOW);
+    }else{
+      SpdRight = map(myData.rightSpd, -100, 100, 0, 180);   // Realiza a conversão para valores entre 0 e 180 para o motor da direita
+      SpdLeft = map(myData.leftSpd, -100, 100, 0, 180); // Realiza a conversão para valores entre 0 e 180 para o motor da esquerda
+      digitalWrite(LED, HIGH);
+    }
+
+    lastVal = myData.val;
+
+    ESCR.write(SpdRight);
+    ESCL.write(SpdLeft);
+
+  /* Serial.print("SpdRight: ");
+    Serial.print(SpdRight);
+    Serial.print("\t");
+    Serial.print("SpdLeft: ");
+    Serial.println(SpdLeft); */
   }
-
-  lastVal = myData.val;
-
-  ESCR.write(SpdRight);
-  ESCL.write(SpdLeft);
-
- /* Serial.print("SpdRight: ");
-  Serial.print(SpdRight);
-  Serial.print("\t");
-  Serial.print("SpdLeft: ");
-  Serial.println(SpdLeft); */
   delay(20);
 }
 
