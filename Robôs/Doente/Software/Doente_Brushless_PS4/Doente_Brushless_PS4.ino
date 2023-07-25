@@ -6,9 +6,15 @@
 char ipControle[18] = "5C:96:56:64:A6:20"; //MAC address atrubuído ao controle
 int analogicoMargemDeErro = 30; //definiçao do ponto morto
 
+#define L_center 10
+#define R_center 10
+
 //Pinos das ESCs
 int ESCRPinL = 32;   
 int ESCRPinR = 33; 
+
+int PS4_L = 0;
+int PS4_R = 0;
 
 //PWM
 int frequenciaESC = 48; //Frequencia do brushless de locomoçao
@@ -21,32 +27,53 @@ Servo ESCR;
 
 int inv = 1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
 void motors_control(int linear, int angular) {
-  int result_R = linear - angular; //ao somar o angular com linear em cada motor conseguimos a ideia de direcao do robo
-  int result_L = linear + angular;
-  //não envia valores de potencia abaixo de 15, que não são fortes o suficiente para mover o robo
-  if(result_R<15 && result_R >-15) result_R=0; 
-  if(result_L<15 && result_L >-15 ) result_L=0;
-  //Não permite valores superiores a 255 ou inferiores a -255
-  if(result_R >255 ) result_R= 254;  
-  if(result_R<-255 ) result_R=-254;
-  if(result_L >255 ) result_L= 254;
-  if(result_L<-255 ) result_L=-254;  
-  
+  int result_R = 0;
+  int result_L = 0;
+  if (((L_center * -1) < linear) && (linear < L_center)) linear = 0;
+  if (((R_center * -1) < angular) && (angular < R_center)) angular = 0;
+  Serial.print("Linear: ");
+  Serial.print(linear);
+  Serial.print("\t");
+  Serial.print("Angular: ");
+  Serial.print(angular);
+  Serial.print("\t");
+  if ((linear == 0) && (angular != 0)){
+    result_R = angular*(0.8);
+    result_L = angular*(-1)*0.8;
+  }
+  else if (angular == 0){
+    result_R = linear;
+    result_L = linear;
+  }
+  else if (angular > 0){
+    result_R = linear - angular; //ao somar o angular com linear em cada motor conseguimos a ideia de direcao do robo
+    result_L = linear;
+  }
+  else{
+    result_R = linear;
+    result_L = linear+angular;
+  }
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
+  Serial.print("resultL: ");
+  Serial.print(result_L);
+  Serial.print("\t");
+  Serial.print("resultR: ");
+  Serial.print(result_R);
+  Serial.print("\t");
   motor_B(result_L);
   motor_A(result_R); 
 
 }
 
 void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for negativo troca o sentido
-  speedA = map(speedA, -255, 255, 120, 60);  
+  speedA = map(speedA, -128, 127, 30, 150);  
   ESCR.write(speedA);
   Serial.print("R: ");
   Serial.println(speedA);
 }
 
 void motor_B(int speedB){
-  speedB = map(speedB, -255, 255, 60, 120);  
+  speedB = map(speedB, -128, 127, 30, 150);  
   ESCL.write(speedB);
   Serial.print("L: ");
   Serial.print(speedB);
@@ -78,13 +105,10 @@ void loop() {
   //motors_control(linear_speed*multiplicador, angular_speed* multiplicador2);
   // Multiplicadcor = 1.8 para aumentar a velocidade linear, o quao rapido o robo vai ser
   // Multiplicadcor2 = multiplic_curva, parametro que varia de 1 ate a 2.3 para suavisar as curvas em alta velocidade
-    if(PS4.LStickY()<-analogicoMargemDeErro || PS4.LStickY()>analogicoMargemDeErro){
-      motors_control((1.9)*inv*PS4.LStickY(), PS4.RStickX());
-
-    }else { // Controle sobre valores pequenos devido a problemas na funcao map
-      motors_control((1.6)*inv*PS4.LStickY(), (1.4)*PS4.RStickX());
-    }
-
+    PS4_L = PS4.LStickY();
+    PS4_R = PS4.RStickX();
+    if ((PS4_L > -40) && (PS4_L< 40))  motors_control(inv*PS4_L, PS4_R*0.5);
+    else motors_control(inv*PS4_L*0.8, PS4_R * 0.5);
   //Sentido de locomocao invertido - Seta para baixo
     if(PS4.Down()){
       inv = -1;
@@ -96,14 +120,14 @@ void loop() {
       delay(100);
     }
   }
-    
+    delay(10);
   //Failsafe
   if(PS4.isConnected()!= true){
-  motors_control(0,0);
-  Serial.println("Restart");
-  PS4.end();
-  ESP.restart();
-  delay(20);
+    motors_control(0,0);
+    Serial.println("Restart");
+    PS4.end();
+    ESP.restart();
+    delay(20);
   }
 }
  

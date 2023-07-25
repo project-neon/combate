@@ -10,7 +10,7 @@
   #define B2 25
   #define MAC_ADDRESS "56:A4:53:A2:01:8F"
 
-int inv = 1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
+int inv = -1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
 void motors_control(int linear, int angular) {
   int result_R = linear - angular; //ao somar o angular com linear em cada motor conseguimos a ideia de direcao do robo
   int result_L = linear + angular;
@@ -24,8 +24,8 @@ void motors_control(int linear, int angular) {
   if(result_L<-255 ) result_L=-254;  
   
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
-  motor_A(result_R); 
-  motor_B(result_L);
+  motor_B(result_R);
+  motor_A(result_L); 
 }
 
 void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for negativo troca o sentido
@@ -37,7 +37,8 @@ void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for
     digitalWrite(A2, 1);
   }
   ledcWrite(5,abs(speedA));
-
+  Serial.print("R: ");
+  Serial.println(speedA);
 }
 
 void motor_B(int speedB){
@@ -49,6 +50,9 @@ void motor_B(int speedB){
     digitalWrite(B2, 1);
   }
   ledcWrite(6,abs(speedB));
+  Serial.print("L: ");
+  Serial.print(speedB);
+  Serial.print("\t");
 
 }
 
