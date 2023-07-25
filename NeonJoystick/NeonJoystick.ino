@@ -13,28 +13,27 @@
 4. BEETLEJUICE
 
 
- - Falta separar os códigos para diferentes robos
+ - Falta fazer calibração
 
 
-- falta arrumar o debouncing
  * */
-
+// ---------------------- VARIÁVEL DE AUTENTICAÇÃO ---------//
 #define CONNECT_KEY 2304
 // --------------------- PINOS DOS ANALÓGICOS --------------//
 #define potPinD 33  
 #define potPinV 32      
 
 //---------------- PINOS DO DIP SWITCH ---------------//
-#define switch1 34 
-#define switch2 35
-#define switch3 25
-#define switch4 26
+#define switch1 15
+#define switch2 14
+#define switch3 13
+#define switch4 12
 
 //---------------- PINOS DOS BOTÕES ---------------//
-#define B1 12
-#define B2 18
-/*#define B3 18
-#define B4 5*/
+#define B1 19
+#define B2 23
+#define B3 18
+#define B4 5
 
 //----------------VARIAVIES DE DETECÇAO DE ROBO (DIPSWITCH) ---------------//
 #define TEMPO_DETECCAO 100
@@ -47,7 +46,7 @@
 #define LED 2   //LED para verificação de status da comunicação
 //#define CAL 15  //Pino usado para calibrar os joysticks
 
-#define DT_DEBOUNCING 200
+#define DT_DEBOUNCING 300
 
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -64,7 +63,7 @@ int statusCom = 0;
 int lastValidacao = 0;
 int atualValidacao = 0;
 
-int inv = -1; //indica se o sentido de locomoção está invertido
+int inv = 1; //indica se o sentido de locomoção está invertido
 
 
 int button1 = 0;
@@ -87,14 +86,14 @@ unsigned long t_b2 = 0;
 
 
 int menorLX = 0;
-int menorMidLX = 1450;
-int maiorMidLX = 1900;
-int maiorLX = 4095;
+int menorMidLX = 1300;
+int maiorMidLX = 1340;
+int maiorLX = 2900;
 
-int menorRY = 0;
-int menorMidRY = 1450;
-int maiorMidRY = 1900;
-int maiorRY = 4095;
+int menorRY = 2900;
+int menorMidRY = 1370;
+int maiorMidRY = 1320;
+int maiorRY = 0;
 //---------- ----------------------- ---------------- //
 
 uint8_t mac_address[6] = {};
@@ -419,10 +418,10 @@ void setup() {
   pinMode(LED, OUTPUT);
   pinMode(potPinD, INPUT);
   pinMode(potPinV, INPUT);
- // pinMode(B1, INPUT_PULLDOWN); //Botões
- // pinMode(B2, INPUT_PULLDOWN);
-  //pinMode(B3, INPUT);
- // pinMode(B4, INPUT);
+  pinMode(B1, INPUT); //Botões
+  pinMode(B2, INPUT);
+  pinMode(B3, INPUT);
+  pinMode(B4, INPUT);
   pinMode(switch1, INPUT);
   pinMode(switch2, INPUT);
   pinMode(switch3, INPUT);
@@ -464,10 +463,6 @@ void loop() {
         if (mac_index != 0){
           mac_index = mac_index - 1;
           memcpy(mac_address, addressArrays[mac_index], 6);
-          for(int i = 0; i < 6; i++)
-            {
-              Serial.println(mac_address[i]);
-            }
           status_connect = connectRobot(mac_address);
           delay(1000);
           if(status_connect == 1){
@@ -518,7 +513,12 @@ void loop() {
 
     valorDir = analogRead(potPinD);
     valorSpd = analogRead(potPinV);
-
+    Serial.print("AnalogE: ");
+    Serial.print(valorSpd);
+    Serial.print("\t");
+    Serial.print("AnalogD: ");
+    Serial.print(valorDir);
+    Serial.print("\t");
     if (valorDir >= menorMidLX && valorDir <= maiorMidLX){
         valorDir = 0; 
     }else if (valorDir < menorMidLX){
@@ -548,12 +548,11 @@ void loop() {
         mySpd.spdRight = valorSpd;
         mySpd.dir = "CENTRO";
     }
-
-    Serial.print("VD: ");
-    Serial.print(mySpd.spdRight);
-    Serial.print("\t");
     Serial.print("VE: ");
     Serial.print(mySpd.spdLeft);
+    Serial.print("\t");
+    Serial.print("VD: ");
+    Serial.print(mySpd.spdRight);
     Serial.print("\t");
     /*
   /*    Serial.print("B1: ");

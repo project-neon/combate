@@ -62,12 +62,12 @@ void motors_control(int linear, int angular) {
   //if(result_R<15 && result_R >-15) result_R=0; 
  // if(result_L<15 && result_L >-15 ) result_L=0;
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
-  motor_A(result_L);
-  motor_B(result_R);
+  motor_A(result_R);
+  motor_B(result_L);
 }
 
 void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for negativo troca o sentido
-  speedA =  map(speedA, -256, 254, 0, 180);
+  speedA =  map(speedA, -256, 254, 180, 0);
   ESCR.write(speedA);
   Serial.print("L: ");
   Serial.print(speedA);
@@ -169,7 +169,7 @@ void loop() {
         ESCArma.write(angle);
         Serial.println(angle); 
         } 
-      delay(400);
+      delay(20);
 
   }
     
