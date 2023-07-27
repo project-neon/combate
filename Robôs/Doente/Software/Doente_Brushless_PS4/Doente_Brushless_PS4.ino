@@ -45,11 +45,11 @@ void motors_control(int linear, int angular) {
     result_R = linear;
     result_L = linear;
   }
-  else if (angular > 0){
+  else if (angular < 0){
     result_R = linear - angular; //ao somar o angular com linear em cada motor conseguimos a ideia de direcao do robo
     result_L = linear;
   }
-  else{
+  else if (angular>0){
     result_R = linear;
     result_L = linear+angular;
   }
