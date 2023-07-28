@@ -17,7 +17,7 @@
 #define Ppm_Min_Throttle  1048
 #define Ppm_Max_Throttle  1952
 //Setup MAC address do controle
-#define MAC_ADDRESS "56:A4:53:A2:01:8F"
+#define MAC_ADDRESS "84:15:51:7B:D0:35"
 
 //VARIÁVEL DE INVERSÃO DE MOVIMENTO
 int inv = 1; //se o robô estiver começando invertindo, alternar para -1 ou 1
@@ -42,8 +42,8 @@ void motors_control(int linear, int angular) {
   if(result_L<-255 ) result_L=-254;  
   
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
-  motor_A(result_R); 
-  motor_B(result_L);
+  motor_A(result_L); 
+  motor_B(result_R);
 }
 
 void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for negativo troca o sentido
@@ -54,9 +54,6 @@ void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for
     digitalWrite(A1, 0);
     digitalWrite(A2, 1);
   }
-  Serial.print("R: ");
-  Serial.print(speedA);
-  Serial.print("\t");
   ledcWrite(5,abs(speedA));
 
 }
@@ -69,8 +66,6 @@ void motor_B(int speedB){
     digitalWrite(B1, 0);
     digitalWrite(B2, 1);
   }
-  Serial.print("L: ");
-  Serial.println(speedB);
   ledcWrite(6,abs(speedB));
 
 }

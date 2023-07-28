@@ -25,7 +25,7 @@ int Ppm_Max_Throttle = 1960;
 Servo ESCL;
 Servo ESCR;
 
-int inv = -1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
+int inv = 1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
 void motors_control(int linear, int angular) {
   int result_R = 0;
   int result_L = 0;
@@ -49,8 +49,8 @@ void motors_control(int linear, int angular) {
   }
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
 
-  motor_B(result_L);
-  motor_A(result_R); 
+  motor_B(result_R);
+  motor_A(result_L); 
 
 }
 
