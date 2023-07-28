@@ -8,7 +8,7 @@
   #define A2 12
   #define B1 33
   #define B2 25
-  #define MAC_ADDRESS "56:A4:53:A2:01:8F"
+  #define MAC_ADDRESS "F2:32:20:B9:89:CF"
 
 int inv = -1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
 void motors_control(int linear, int angular) {

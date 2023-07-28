@@ -3,7 +3,7 @@
 //Biblioteca para controle de servo p/ brushless
 #include <ESP32Servo.h>
 
-char ipControle[18] = "5C:96:56:64:A6:20"; //MAC address atrubuído ao controle
+#define MAC_ADDRESS "64:64:64:64:64:64" //MAC address atrubuído ao controle
 int analogicoMargemDeErro = 30; //definiçao do ponto morto
 
 #define L_center 10
@@ -25,41 +25,30 @@ int Ppm_Max_Throttle = 1960;
 Servo ESCL;
 Servo ESCR;
 
-int inv = 1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
+int inv = -1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
 void motors_control(int linear, int angular) {
   int result_R = 0;
   int result_L = 0;
   if (((L_center * -1) < linear) && (linear < L_center)) linear = 0;
   if (((R_center * -1) < angular) && (angular < R_center)) angular = 0;
-  Serial.print("Linear: ");
-  Serial.print(linear);
-  Serial.print("\t");
-  Serial.print("Angular: ");
-  Serial.print(angular);
-  Serial.print("\t");
   if ((linear == 0) && (angular != 0)){
-    result_R = angular*(0.8);
-    result_L = angular*(-1)*0.8;
+    result_L = angular*(0.8);
+    result_R = angular*(-1)*0.8;
   }
   else if (angular == 0){
-    result_R = linear;
     result_L = linear;
-  }
-  else if (angular < 0){
-    result_R = linear - angular; //ao somar o angular com linear em cada motor conseguimos a ideia de direcao do robo
-    result_L = linear;
-  }
-  else if (angular>0){
     result_R = linear;
-    result_L = linear+angular;
+  }
+  else if (angular > 0){
+    result_L = linear; //ao somar o angular com linear em cada motor conseguimos a ideia de direcao do robo
+    result_R = linear - angular;
+  }
+  else if (angular<0){
+    result_L = linear + angular;
+    result_R = linear;
   }
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
-  Serial.print("resultL: ");
-  Serial.print(result_L);
-  Serial.print("\t");
-  Serial.print("resultR: ");
-  Serial.print(result_R);
-  Serial.print("\t");
+
   motor_B(result_L);
   motor_A(result_R); 
 
@@ -87,7 +76,7 @@ void setup(void) {
     delay(10); // will pause Zero, Leonardo, etc until serial console opens
 
 
-  PS4.begin(ipControle);
+  PS4.begin(MAC_ADDRESS);
   Serial.println("Ready.");
   
   ESCL.setPeriodHertz(frequenciaESC); //define a frequencia de operaçao do ESC do motor esquerdo

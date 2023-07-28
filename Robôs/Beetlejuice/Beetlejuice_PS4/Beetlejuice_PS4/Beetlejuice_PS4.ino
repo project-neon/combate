@@ -34,53 +34,53 @@ int angle = 0;
 void motors_control(int linear, int angular) {
   int result_R = 0;
   int result_L = 0;
-  //max 128 min -127
- /* if (angular < 0 ) angular = map(angular, -127,0, -100, 0);
-  else if (angular > 0) angular = map(angular, 0, 128, 0, 100);
-  if (linear < 0) linear = map(linear, -127, 0, -100, 0);
-  else if (linear > 0) linear = map(linear, 0, 128, 0, 100);
-  if(angular>0){
-      result_R = linear - linear*(angular/100);
-      result_L = linear;
+  if (((L_center * -1) < linear) && (linear < L_center)) linear = 0;
+  if (((R_center * -1) < angular) && (angular < R_center)) angular = 0;
+/*  Serial.print("Linear: ");
+  Serial.print(linear);
+  Serial.print("\t");
+  Serial.print("Angular: ");
+  Serial.print(angular);
+  Serial.print("\t");*/
+  if ((linear == 0) && (angular != 0)){
+    result_L = angular*(0.8);
+    result_R = angular*(-1)*0.8;
   }
-  else if (angular<0){
+  else if (angular == 0){
+    result_L = linear;
     result_R = linear;
-    result_L = linear + linear*(angular/100);
   }
-  result_R = map(result_R, -100, 100, 0, 180);
-  result_L = map(result_L, -100, 100, 0, 180);*/
-  //angular = map(angular, -127,128,0, 100);
-  if (angular != 0){
-    result_R = linear - angular; //ao somar o angular com linear em cada motor conseguimos a ideia de direcao do robo
+  else if (angular > 0){
+    result_L = linear; //ao somar o angular com linear em cada motor conseguimos a ideia de direcao do robo
+    result_R = linear - angular;
+  }
+  else if (angular < 0){
     result_L = linear + angular;
+    result_R = linear;
   }
-  else{
-    result_R = map(linear, -128, 127, -256, 254);
-    result_L = map(linear, -128, 127, -256, 254);
-  }
-//não envia valores de potencia abaixo de 15, que não são fortes o suficiente para mover o robo
-  //if(result_R<15 && result_R >-15) result_R=0; 
- // if(result_L<15 && result_L >-15 ) result_L=0;
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
-  motor_A(result_R);
+  Serial.print("resultL: ");
+  Serial.print(result_L);
+  Serial.print("\t");
+  Serial.print("resultR: ");
+  Serial.print(result_R);
+  Serial.print("\t");
   motor_B(result_L);
+  motor_A(result_R); 
 }
 
 void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for negativo troca o sentido
-  speedA =  map(speedA, -256, 254, 180, 0);
+  speedA =  map(speedA, -128, 127, 40, 140);
   ESCR.write(speedA);
-  Serial.print("L: ");
+ /* Serial.print("r: ");
   Serial.print(speedA);
-  Serial.print("\t");
+  Serial.print("\t");*/
 
 }
 
 void motor_B(int speedB){
-  speedB = map(speedB, -256, 254, 0 ,180);
+  speedB = map(speedB, -128, 127, 140 ,40);
   ESCL.write(speedB);
-  Serial.print("R: ");
-  Serial.print(speedB);
-  Serial.print("\t");
 }
 
 
@@ -113,43 +113,42 @@ void loop() {
   while(PS4.isConnected()) {
     PS4_L = PS4.LStickY();
     PS4_R = PS4.RStickX();
-    if (((L_center * -1) < PS4_L) && (PS4_L < L_center)) PS4_L = 0;
-    if (((R_center * -1) < PS4_R) && (PS4_R < R_center)) PS4_R = 0;
   //motors_control(linear_speed*multiplicador, angular_speed* multiplicador2);
   // Multiplicadcor = 1.8 para aumentar a velocidade linear, o quao rapido o robo vai ser
   // Multiplicadcor2 = multiplic_curva, parametro que varia de 1 ate a 2.3 para suavisar as curvas em alta velocidade
-    Serial.print("AnalogL: ");
+    /*Serial.print("AnalogL: ");
     Serial.print(PS4_L);
     Serial.print("\t");
     Serial.print("AnalogR: ");
-    Serial.println(PS4_R);
-    motors_control((inv)*PS4_L, PS4_R);     
+    Serial.println(PS4_R);*/
+    if ((PS4_L > -40) && (PS4_L< 40))  motors_control(inv*PS4_L, PS4_R*0.5);
+    else motors_control(inv*PS4_L*0.8, PS4_R * 0.5);     
       //inicio do Brushless - seta o piso do valor (primeiro beep)- Botão quadrado
       if (PS4.Cross()) { 
           angle=0;
           ESCArma.write(angle);
-          Serial.println(angle);
+        //  Serial.println(angle);
           delay(100);
       }
       if (PS4.Square()) { 
           angle=0;
           ESCArma.write(angle);
-          Serial.println(angle);
+         // Serial.println(angle);
           delay(500);
           angle=180;
           ESCArma.write(angle);
-          Serial.println(angle);
+       //   Serial.println(angle);
           delay(500);
           angle=0;
           ESCArma.write(angle);
-          Serial.println(angle);
+         // Serial.println(angle);
           delay(500);
       }
       //Função para arma ativa, aceleração discreta com o gatilho - Botão R1
       if (PS4.R1()){
         angle=angle+2;
         ESCArma.write(angle);
-        Serial.println(angle);
+     //   Serial.println(angle);
         delay(200);
     }
         //Sentido de locomocao invertido - Botão Seta para baixo
@@ -167,7 +166,7 @@ void loop() {
         if(PS4.R2()){ 
         angle=map(PS4.R2Value(),0,255,0,90);
         ESCArma.write(angle);
-        Serial.println(angle); 
+        //Serial.println(angle); 
         } 
       delay(20);
 
