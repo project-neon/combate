@@ -20,7 +20,7 @@
 #define MAC_ADDRESS "84:15:51:7B:D0:35"
 
 //VARIÁVEL DE INVERSÃO DE MOVIMENTO
-int inv = 1; //se o robô estiver começando invertindo, alternar para -1 ou 1
+int inv = -1; //se o robô estiver começando invertindo, alternar para -1 ou 1
 
 /*int ESCPin = 14; 
 int frequenciaESC = 50;
@@ -54,6 +54,9 @@ void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for
     digitalWrite(A1, 0);
     digitalWrite(A2, 1);
   }
+  Serial.print("L: ");
+  Serial.print(speedA);
+  Serial.print("\t");
   ledcWrite(5,abs(speedA));
 
 }
@@ -66,6 +69,8 @@ void motor_B(int speedB){
     digitalWrite(B1, 0);
     digitalWrite(B2, 1);
   }
+  Serial.print("R: ");
+  Serial.println(speedB);
   ledcWrite(6,abs(speedB));
 
 }
@@ -110,10 +115,10 @@ void loop() {
   // Multiplicadcor = 1.8 para aumentar a velocidade linear, o quao rapido o robo vai ser
   // Multiplicadcor2 = multiplic_curva, parametro que varia de 1 ate a 2.3 para suavisar as curvas em alta velocidade
     if(PS4.LStickY()<-25 || PS4.LStickY()>25){
-      motors_control((1.8)*inv*PS4.LStickY(),(1.3)*PS4.RStickX());
+      motors_control((2)*inv*PS4.LStickY(),(1.5)*PS4.RStickX());
 
     }else { // Controle sobre valores pequenos devido a problemas na funcao map
-      motors_control((inv)*PS4.LStickY(), (1.5)*PS4.RStickX());
+      motors_control((inv)*PS4.LStickY(), 2*PS4.RStickX());
 
     }       
       //inicio do Brushless - seta o piso do valor (primeiro beep)- Botão quadrado
