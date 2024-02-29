@@ -42,8 +42,8 @@ void motors_control(int linear, int angular) {
   if(result_L<-255 ) result_L=-254;  
   
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
-  motor_A(result_L); 
-  motor_B(result_R);
+  motor_A(result_R); 
+  motor_B(result_L);
 }
 
 void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for negativo troca o sentido

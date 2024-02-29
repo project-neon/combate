@@ -2,13 +2,13 @@
 #include <PS4Controller.h>
 
   //Setup pinos Locomocão Ponte H (TB6612fng)
-  #define PWMA 27
-  #define PWMB 26
-  #define A1 13
-  #define A2 12
-  #define B1 33
-  #define B2 25
-  #define MAC_ADDRESS "F2:32:20:B9:89:CF"
+#define PWMA 32
+#define PWMB 13
+#define A1  25
+#define A2  33
+#define B1  26
+#define B2  27
+#define MAC_ADDRESS "00:1A:7D:DA:71:10"
 
 int inv = -1; //Permite inverter a pilotagem conforme o lado do robo que esta para cima
 void motors_control(int linear, int angular) {
@@ -91,24 +91,9 @@ void loop() {
   //motors_control(linear_speed*multiplicador, angular_speed* multiplicador2);
   // Multiplicadcor = 1.8 para aumentar a velocidade linear, o quao rapido o robo vai ser
   // Multiplicadcor2 = multiplic_curva, parametro que varia de 1 ate a 2.3 para suavisar as curvas em alta velocidade
-     if(PS4.LStickY()<-25 || PS4.LStickY()>25){
-      motors_control((1.8)*inv*PS4.LStickY(),(1.3)*PS4.RStickX());
-
-    }else { // Controle sobre valores pequenos devido a problemas na funcao map
-      motors_control((inv)*PS4.LStickY(), (1.5)*PS4.RStickX());
-
+      motors_control((-1.8)*inv*PS4.LStickY(),(1.3)*PS4.RStickX());
+    delay(100);
     }
-
-  //Sentido de locomocao invertido
-    if(PS4.Down()){
-      inv = -1;
-      delay(100);
-    } 
-    if(PS4.Up()){
-      inv = 1;
-      delay(100);
-    }
-  }
     
   //Failsafe
   if(PS4.isConnected()!= true){

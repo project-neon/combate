@@ -4,17 +4,15 @@
 #include <ESP32Servo.h>
 
 #define MAC_ADDRESS "64:64:64:64:64:64" //MAC address atrubuído ao controle
-
-//PWM
 #define frequenciaESC 48 //Frequencia do brushless de locomoçao
-#define Ppm_Min_Throttle 1040 //Largura de pulso min/max do brushless de locomoçao
-#define Ppm_Max_Throttle 1960
+#define PpmMinThrottle 1040 //Largura de pulso min/max do brushless de locomoçao
+#define PpmMaxThrottle 1960
 
 
 int analogicoMargemDeErro = 30; //definiçao do ponto morto
 
-#define L_center 10
-#define R_center 10
+#define L_center 15
+#define R_center 15
 
 //Pinos das ESCs
 int ESCRPinL = 26;   
@@ -22,11 +20,6 @@ int ESCRPinR = 27;
 
 int PS4_L = 0;
 int PS4_R = 0;
-
-//PWM
-int frequenciaESC = 48; //Frequencia do brushless de locomoçao
-int Ppm_Min_Throttle = 1040; //Largura de pulso min/max do brushless de locomoçao
-int Ppm_Max_Throttle = 1960;
 
 //Definiçao das variáveis de Servo (brushless)
 Servo ESCL;
@@ -39,8 +32,8 @@ void motors_control(int linear, int angular) {
   if (((L_center * -1) < linear) && (linear < L_center)) linear = 0;
   if (((R_center * -1) < angular) && (angular < R_center)) angular = 0;
   if ((linear == 0) && (angular != 0)){
-    result_L = angular*(0.4);
-    result_R = angular*(-1)*0.4;
+    result_L = angular*(0.58);
+    result_R = angular*(-1)*0.58;
   }
   else if (angular == 0){
     result_L = linear;
@@ -48,10 +41,10 @@ void motors_control(int linear, int angular) {
   }
   else if (angular > 0){
     result_L = linear; //ao somar o angular com linear em cada motor conseguimos a ideia de direcao do robo
-    result_R = linear - (angular*0.4);
+    result_R = linear - (angular*0.58);
   }
   else if (angular<0){
-    result_L = linear + (angular*0.4);
+    result_L = linear + (angular*0.58);
     result_R = linear;
   }
   //manda para a funcao motor um valor de -255 a 255, o sinal signifca a direcao  
@@ -62,16 +55,14 @@ void motors_control(int linear, int angular) {
 }
 
 void motor_A(int speedA){  // se o valor for positivo gira para um lado e se for negativo troca o sentido
-  if((PS4.R2()) && (abs(speedA) > 110 )) speedA = map(inv*PS4.R2Value(), -255, 255, 20, 160);
-  else speedA = map(speedA, -128, 127, 50, 130);  
+  speedA = map(speedA, -128, 127, 45, 135);  
   ESCR.write(speedA);
   Serial.print("R: ");
   Serial.println(speedA);
 }
 
 void motor_B(int speedB){
-  if((PS4.R2()) && (abs(speedB) > 110 )) speedB = map(inv*PS4.R2Value(), -255, 255, 20, 160);
-  else speedB = map(speedB, -128, 127, 50, 130);  
+  speedB = map(speedB, -128, 127, 45, 135);  
   ESCL.write(speedB);
   Serial.print("L: ");
   Serial.print(speedB);
@@ -89,9 +80,9 @@ void setup(void) {
   Serial.println("Ready.");
   
   ESCL.setPeriodHertz(frequenciaESC); //define a frequencia de operaçao do ESC do motor esquerdo
-  ESCL.attach(ESCRPinL, Ppm_Min_Throttle, Ppm_Max_Throttle); //atribui o pino às larguras de puslo
+  ESCL.attach(ESCRPinL, PpmMinThrottle, PpmMaxThrottle); //atribui o pino às larguras de puslo
   ESCR.setPeriodHertz(frequenciaESC);
-  ESCR.attach(ESCRPinR, Ppm_Min_Throttle, Ppm_Max_Throttle); 
+  ESCR.attach(ESCRPinR, PpmMinThrottle, PpmMaxThrottle); 
 
   while(PS4.isConnected()!= true){
   delay(20);}
